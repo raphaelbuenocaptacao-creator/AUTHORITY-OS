@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="description" content="Authority OS — sistema operacional de autoridade, conteúdo e crescimento local." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <title>Authority OS</title>
+  <style>
+    :root{--bg:#070b14;--panel:#0f1728;--panel2:#121c31;--text:#f7f9fc;--muted:#9fa9bd;--line:#24304a;--accent:#8b5cf6;--accent2:#22d3ee;--good:#34d399;--warn:#f59e0b;--danger:#fb7185}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(circle at top right,#151a35 0,#070b14 42%,#050812 100%);color:var(--text)}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}.shell{max-width:1320px;margin:auto;padding:20px}.topbar{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:900;color:white;box-shadow:0 12px 35px #8b5cf644}.brand h1{font-size:21px;margin:0}.brand span{font-size:12px;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#11192b;color:#fff;border-radius:12px;padding:11px 14px;font-weight:700}.btn.primary{background:linear-gradient(135deg,var(--accent),#6d28d9);border:0}.grid{display:grid;grid-template-columns:260px 1fr;gap:18px}.sidebar{background:#0a1120cc;border:1px solid var(--line);border-radius:22px;padding:14px;height:fit-content;position:sticky;top:16px}.nav{display:grid;gap:8px}.nav button{background:transparent;border:0;color:#c7d0e0;text-align:left;padding:12px;border-radius:12px}.nav button.active,.nav button:hover{background:#151f35;color:#fff}.main{display:grid;gap:18px}.hero{background:linear-gradient(135deg,#141b31,#10182a 60%,#102235);border:1px solid #2d3955;border-radius:24px;padding:24px;display:grid;grid-template-columns:1.3fr .7fr;gap:18px}.eyebrow{color:#a78bfa;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.12em}.hero h2{font-size:34px;line-height:1.05;margin:10px 0 12px;max-width:760px}.hero p{color:#b7c0d1;max-width:720px}.score{border:1px solid #33415f;border-radius:20px;padding:18px;background:#0a1221}.scorebig{font-size:54px;font-weight:900}.score small{color:var(--muted)}.progress{height:9px;background:#222d46;border-radius:99px;overflow:hidden;margin:12px 0}.progress>i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--accent),var(--accent2))}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}.kpi{font-size:28px;font-weight:900;margin:6px 0}.muted{color:var(--muted);font-size:13px}.section{background:#0b1220cc;border:1px solid var(--line);border-radius:22px;padding:20px}.sectionhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.section h3{margin:0}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.list{display:grid;gap:10px}.item{border:1px solid var(--line);background:#0e1728;border-radius:15px;padding:13px}.item strong{display:block;margin-bottom:4px}.tag{display:inline-block;border:1px solid #35415d;padding:5px 8px;border-radius:99px;color:#cbd5e1;font-size:11px;margin-top:8px}.tag.good{color:#7ef0c4;border-color:#1f6f58}.tag.warn{color:#ffd07a;border-color:#704f17}.command{display:flex;gap:10px}.command input{flex:1;background:#09101d;color:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}.idea{padding:16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#111a2d,#0c1322)}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day{min-height:90px;background:#0c1424;border:1px solid var(--line);border-radius:13px;padding:10px;font-size:12px}.day b{display:block;margin-bottom:6px}.dot{width:8px;height:8px;border-radius:99px;background:var(--accent2);display:inline-block;margin-right:5px}.footer{color:#68758e;text-align:center;padding:26px 0 8px;font-size:12px}.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:18px}.modal.show{display:grid}.modalbox{width:min(720px,100%);background:#0d1525;border:1px solid #33415f;border-radius:22px;padding:20px}.modalbox textarea{width:100%;min-height:130px;background:#09101d;color:white;border:1px solid var(--line);border-radius:14px;padding:12px}.toast{position:fixed;right:18px;bottom:18px;background:#101827;border:1px solid #31405d;padding:13px 16px;border-radius:13px;display:none}.toast.show{display:block}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}.sidebar{position:static}.nav{grid-template-columns:repeat(3,1fr)}.hero{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.shell{padding:12px}.topbar{align-items:flex-start}.actions .btn:not(.primary){display:none}.hero h2{font-size:28px}.cards,.two{grid-template-columns:1fr}.calendar{grid-template-columns:repeat(2,1fr)}.nav{grid-template-columns:1fr 1fr}.sidebar{padding:10px}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="brand"><div class="logo">AO</div><div><h1>Authority OS</h1><span>Growth & Personal Brand Intelligence</span></div></div>
+    <div class="actions"><button class="btn" id="installBtn" hidden>Instalar App</button><button class="btn primary" onclick="openCommand()">+ Novo comando</button></div>
+  </div>
+  <div class="grid">
+    <aside class="sidebar">
+      <div class="nav">
+        <button class="active">Visão Geral</button><button>Authority Score</button><button>Plano de Conteúdo</button><button>Radar Local</button><button>Growth Intelligence</button><button>Leads</button><button>Automações</button><button>Marca & Perfil</button>
+      </div>
+    </aside>
+    <main class="main">
+      <section class="hero">
+        <div><div class="eyebrow">Centro de comando</div><h2>Transforme presença em autoridade. E autoridade em oportunidades.</h2><p>O Authority OS analisa sua marca, encontra oportunidades locais, cria seu plano de conteúdo e acompanha o que realmente aproxima você do público certo.</p><div class="command"><input id="quickCommand" placeholder="Ex.: Quero atingir empresários de Campos do Jordão esta semana"/><button class="btn primary" onclick="runQuick()">Executar</button></div></div>
+        <div class="score"><small>AUTHORITY SCORE</small><div class="scorebig">72<span style="font-size:22px;color:#7b88a4">/100</span></div><div class="progress"><i></i></div><small>+8 pontos nos últimos 30 dias</small><div style="margin-top:14px"><span class="tag good">Posicionamento forte</span> <span class="tag warn">Frequência pode melhorar</span></div></div>
+      </section>
+      <section class="cards">
+        <div class="card"><div class="muted">Alcance qualificado</div><div class="kpi">12.480</div><div class="muted">+18,4% no período</div></div>
+        <div class="card"><div class="muted">Visitas ao perfil</div><div class="kpi">1.386</div><div class="muted">11,1% do alcance</div></div>
+        <div class="card"><div class="muted">Conversas iniciadas</div><div class="kpi">47</div><div class="muted">Leads por Direct/WhatsApp</div></div>
+        <div class="card"><div class="muted">Oportunidades</div><div class="kpi">9</div><div class="muted">Potenciais clientes</div></div>
+      </section>
+      <section class="two">
+        <div class="section"><div class="sectionhead"><h3>Plano da Semana</h3><button class="btn" onclick="generatePlan()">Gerar novo</button></div><div class="list" id="planList">
+          <div class="item"><strong>Reel — Autoridade local</strong>"3 decisões que empresários de Campos precisam tomar antes do próximo trimestre."<span class="tag good">Alta prioridade</span></div>
+          <div class="item"><strong>Stories — Bastidor + opinião</strong>Sequência de 5 stories mostrando rotina, visão de mercado e CTA para conversa.<span class="tag">Hoje 18:40</span></div>
+          <div class="item"><strong>Carrossel — Posicionamento</strong>Conteúdo educativo para reforçar percepção profissional e gerar salvamentos.<span class="tag">Quarta</span></div>
+        </div></div>
+        <div class="section"><div class="sectionhead"><h3>Radar Local</h3><span class="tag">Campos do Jordão</span></div><div class="list">
+          <div class="idea"><strong>🔥 Oportunidade de conteúdo</strong><p class="muted">Empreendedorismo local + alta temporada: grave um vídeo curto conectando movimento da cidade com oportunidade para negócios.</p><button class="btn primary" onclick="copyScript()">Criar roteiro</button></div>
+          <div class="item"><strong>Networking</strong><span class="muted">Conteúdos com collab local estão acima da média do seu perfil.</span></div>
+          <div class="item"><strong>Formato vencedor</strong><span class="muted">Vídeos de 25–40s com opinião direta geraram mais visitas ao perfil.</span></div>
+        </div></div>
+      </section>
+      <section class="section"><div class="sectionhead"><h3>Calendário de Autoridade</h3><span class="muted">Estratégia de 7 dias</span></div><div class="calendar">
+        <div class="day"><b>SEG</b><span class="dot"></span>Reel de autoridade<br><span class="muted">19:10</span></div>
+        <div class="day"><b>TER</b><span class="dot"></span>Stories bastidores<br><span class="muted">12:30 / 18:40</span></div>
+        <div class="day"><b>QUA</b><span class="dot"></span>Carrossel educativo<br><span class="muted">19:00</span></div>
+        <div class="day"><b>QUI</b><span class="dot"></span>Reel local<br><span class="muted">18:50</span></div>
+        <div class="day"><b>SEX</b><span class="dot"></span>Prova social<br><span class="muted">17:40</span></div>
+        <div class="day"><b>SÁB</b><span class="dot"></span>Conteúdo leve<br><span class="muted">11:20</span></div>
+        <div class="day"><b>DOM</b><span class="dot"></span>Planejamento<br><span class="muted">20:00</span></div>
+      </div></section>
+      <section class="two">
+        <div class="section"><div class="sectionhead"><h3>Growth Intelligence</h3><span class="tag good">Aprendendo</span></div><div class="list"><div class="item"><strong>Melhor tema</strong><span class="muted">Opinião profissional + contexto local</span></div><div class="item"><strong>Melhor CTA</strong><span class="muted">“Me chama no direct que eu te mostro como penso isso na prática.”</span></div><div class="item"><strong>Próxima recomendação</strong><span class="muted">Aumentar em 30% a frequência de vídeos curtos e testar 2 collabs locais.</span></div></div></div>
+        <div class="section"><div class="sectionhead"><h3>Funil de Autoridade</h3></div><div class="list"><div class="item"><strong>12.480 alcançados</strong><span class="muted">Topo — público exposto</span></div><div class="item"><strong>1.386 visitas</strong><span class="muted">Interesse — 11,1%</span></div><div class="item"><strong>47 conversas</strong><span class="muted">Intenção — 3,4% das visitas</span></div><div class="item"><strong>9 oportunidades</strong><span class="muted">Comercial — 19,1% das conversas</span></div></div></div>
+      </section>
+      <div class="footer">Authority OS • PWA • versão MVP 1.0</div>
+    </main>
+  </div>
+</div>
+<div class="modal" id="cmdModal"><div class="modalbox"><div class="sectionhead"><h3>Novo comando</h3><button class="btn" onclick="closeCommand()">Fechar</button></div><textarea id="cmdText" placeholder="Ex.: Analise meu posicionamento e monte uma estratégia para alcançar empresários de Campos do Jordão nos próximos 7 dias."></textarea><div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn primary" onclick="executeCommand()">Executar estratégia</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+  const toast=(msg)=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)};
+  function openCommand(){document.getElementById('cmdModal').classList.add('show')} function closeCommand(){document.getElementById('cmdModal').classList.remove('show')}
+  function executeCommand(){const v=document.getElementById('cmdText').value.trim(); if(!v)return toast('Digite um comando para o agente.'); closeCommand();toast('Estratégia criada. Integração com IA pronta para conectar.');}
+  function runQuick(){const v=document.getElementById('quickCommand').value.trim();if(!v)return toast('Digite o objetivo da semana.');toast('Objetivo recebido. Plano de autoridade atualizado.');}
+  function generatePlan(){document.getElementById('planList').insertAdjacentHTML('afterbegin','<div class="item"><strong>Novo Reel — Diagnóstico</strong>“O erro que faz um bom profissional parecer comum no Instagram.”<span class="tag good">Gerado agora</span></div>');toast('Novo plano gerado.');}
+  function copyScript(){navigator.clipboard?.writeText('Roteiro: Campos do Jordão não é só turismo. É um mercado onde reputação abre portas. Se você é empresário e ainda trata seu Instagram como cartão de visita, está deixando oportunidade na mesa.');toast('Roteiro copiado.');}
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+  let deferredPrompt;const installBtn=document.getElementById('installBtn');window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.hidden=false});installBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.hidden=true});
+</script>
+</body></html>
