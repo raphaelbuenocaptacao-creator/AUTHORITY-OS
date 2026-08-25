@@ -1,3 +1,5 @@
+import { cors } from './_cors.js';
+
 function parseBody(req) {
   if (!req.body) return {};
   if (typeof req.body === 'string') {
@@ -7,6 +9,7 @@ function parseBody(req) {
 }
 
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   if (!process.env.N8N_WEBHOOK_URL) {
