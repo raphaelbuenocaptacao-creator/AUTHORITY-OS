@@ -1,0 +1,9 @@
+{
+  "summary": "Exemplo de resposta do Authority Agent",
+  "authorityScore": 72,
+  "priorities": ["posicionamento", "vídeos curtos", "prova social"],
+  "contentPlan": [],
+  "radar": [],
+  "ctas": [],
+  "nextActions": []
+}
