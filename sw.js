@@ -1,4 +1,4 @@
-const CACHE='authority-os-v22';
+const CACHE='authority-os-v23';
 const ASSETS=['./','./index.html','./manifest.json','./icon.svg','./app-api.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
