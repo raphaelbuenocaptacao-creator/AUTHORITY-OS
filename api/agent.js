@@ -1,3 +1,5 @@
+import { cors } from './_cors.js';
+
 const SYSTEM = `Você é o Authority OS, um estrategista de autoridade digital e crescimento local.\n\nSua missão é transformar conhecimento, posicionamento e presença digital em autoridade, conversas e oportunidades comerciais.\n\nRegras:\n- Responda sempre em português do Brasil.\n- Nunca prometa crescimento garantido, seguidores garantidos ou vendas garantidas.\n- Gere recomendações práticas, específicas e acionáveis.\n- Priorize clareza, posicionamento, prova social, conteúdo útil, consistência, relacionamento e conversão.\n- Quando houver cidade/público-alvo, adapte a estratégia ao contexto local.\n- Evite spam, automações abusivas, compra de seguidores e táticas que violem políticas das plataformas.\n\nQuando solicitado a criar estratégia, devolva JSON válido com estas chaves: summary, authorityScore, priorities, contentPlan, radar, ctas, nextActions.\nauthorityScore deve ser um número de 0 a 100. priorities e nextActions devem ser arrays curtos. contentPlan deve conter itens com format, title, hook, outline, cta e objective.`;
 
 function parseBody(req) {
@@ -32,12 +34,13 @@ function demoStrategy(input) {
       'Use prova social contextualizada, sem exageros.'
     ],
     ctas: ['Me chama no direct.', 'Quer que eu analise o seu caso?', 'Salve para usar depois.'],
-    nextActions: [`Definir a mensagem principal do perfil`, `Gravar o primeiro Reel em até 24h`, `Publicar e medir visitas ao perfil e conversas`],
+    nextActions: ['Definir a mensagem principal do perfil', 'Gravar o primeiro Reel em até 24h', 'Publicar e medir visitas ao perfil e conversas'],
     goal
   };
 }
 
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
 
   const body = parseBody(req);
@@ -55,7 +58,10 @@ export default async function handler(req, res) {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.65, responseMimeType: 'application/json' } })
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.65, responseMimeType: 'application/json' }
+      })
     });
 
     if (!response.ok) {
