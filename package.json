@@ -1,11 +1,17 @@
 {
   "name": "authority-os",
   "private": true,
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Authority OS — PWA de autoridade, conteúdo e crescimento local",
+  "type": "module",
   "scripts": {
     "dev": "vercel dev",
     "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.6",
+    "postgres": "^3.4.5"
   },
   "engines": {
     "node": ">=20"
