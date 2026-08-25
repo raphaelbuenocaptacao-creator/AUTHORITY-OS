@@ -1,10 +1,21 @@
 {
-  "name":"Authority OS",
-  "short_name":"AuthorityOS",
-  "start_url":"./",
-  "display":"standalone",
-  "background_color":"#070b14",
-  "theme_color":"#0b1020",
-  "description":"Sistema operacional de autoridade, conteúdo e crescimento local.",
-  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "name": "Authority OS",
+  "short_name": "Authority OS",
+  "description": "Agente de autoridade, conteúdo e crescimento local.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060912",
+  "theme_color": "#070B14",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity", "social"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
