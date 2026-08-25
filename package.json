@@ -1,7 +1,7 @@
 {
   "name": "authority-os",
   "private": true,
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Authority OS — PWA de autoridade, conteúdo e crescimento local",
   "scripts": {
     "dev": "vercel dev",
