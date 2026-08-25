@@ -19,12 +19,14 @@ export async function createSession(user){
 
 export function setSessionCookie(res,token){
   const secure=process.env.NODE_ENV==='production';
-  res.setHeader('Set-Cookie',`authority_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800${secure?'; Secure':''}`);
+  const sameSite=secure?'None':'Lax';
+  res.setHeader('Set-Cookie',`authority_session=${token}; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=604800${secure?'; Secure':''}`);
 }
 
 export function clearSessionCookie(res){
   const secure=process.env.NODE_ENV==='production';
-  res.setHeader('Set-Cookie',`authority_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure?'; Secure':''}`);
+  const sameSite=secure?'None':'Lax';
+  res.setHeader('Set-Cookie',`authority_session=; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=0${secure?'; Secure':''}`);
 }
 
 function cookieValue(req,name){
