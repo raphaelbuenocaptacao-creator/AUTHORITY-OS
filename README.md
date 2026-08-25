@@ -2,55 +2,70 @@
 
 Sistema operacional de autoridade, conteúdo e crescimento local.
 
-## V2 — Produto interativo
+## Pilot 2.2
 
-A V2 transforma o protótipo em um PWA utilizável, com dados persistidos localmente no aparelho e uma experiência completa de onboarding até acompanhamento comercial.
+O Authority OS já funciona como PWA interativo no GitHub Pages e agora possui uma camada de backend preparada para IA e automação.
 
-### Entregue
+### Produto
 - PWA instalável e responsivo
-- Onboarding estratégico em 3 etapas
-- Memória da marca e perfil do cliente
-- Authority Score recalculável
-- Plano semanal de autoridade
-- Calendário editorial de 7 dias
-- Content Studio com biblioteca de conteúdos
-- Gerador estruturado de Reels, Stories, Posts e Carrosséis
-- Radar Local personalizado por cidade, negócio e público
-- Growth Intelligence com leitura de funil
-- Leads e estágios de oportunidade
+- Onboarding estratégico
+- Memória da marca
+- Authority Score
+- Plano semanal e calendário
+- Content Studio
+- Radar Local
+- Growth Intelligence
+- Leads e oportunidades
 - Automações configuráveis
 - Centro de comando por objetivo
-- Persistência via localStorage
-- Funcionamento offline básico via Service Worker
+- Persistência local/offline
+
+### Backend pronto no repositório
+- `/api/health` — saúde da API
+- `/api/status` — status Gemini, n8n e banco
+- `/api/agent` — gateway seguro para Gemini
+- `/api/n8n` — gateway seguro para n8n
+- CORS preparado para frontend em domínio separado
+- `.env.example` sem segredos
+- `vercel.json`
+
+### Dados
+- `db/schema.sql` contém o blueprint de produção para workspaces, marcas, conteúdos, leads, automações e métricas.
+
+## Modos de operação
+
+### GitHub Pages
+O app funciona normalmente em modo demonstração/local. Na aba **Integrações**, informe a URL do backend Vercel para ativar IA e automações reais.
+
+### Vercel
+Hospedando o mesmo repositório na Vercel, frontend e `/api/*` podem operar no mesmo domínio.
+
+## Variáveis server-side
+- `GEMINI_API_KEY`
+- `GEMINI_MODEL`
+- `N8N_WEBHOOK_URL`
+- `N8N_WEBHOOK_TOKEN`
+- `DATABASE_URL`
+- `APP_ORIGIN`
+
+Nunca coloque essas chaves no `index.html` ou no JavaScript público.
 
 ## Princípio do produto
 
-O Authority OS não promete seguidores. Ele organiza posicionamento, conteúdo, consistência, percepção profissional, conversas e oportunidades comerciais.
+O Authority OS não promete seguidores. O sistema melhora a máquina de autoridade: posicionamento, consistência, percepção profissional, distribuição, conversas e oportunidades comerciais.
 
-## Segurança
-
-O frontend público não contém chaves de API. Integrações com Gemini, Meta, TikTok, YouTube e n8n devem ser feitas por um backend seguro ou webhook autenticado.
-
-## Próxima fase
-- Backend e autenticação
-- Banco multi-tenant em Neon/Postgres
-- Gemini real para estratégia e conteúdo
-- n8n para execução de automações
-- Aprovação de conteúdo antes de publicar
-- Meta/Instagram API
-- YouTube API
-- TikTok API conforme permissões disponíveis
-- Coleta de métricas reais
-- CRM e follow-up
-
-## Arquitetura alvo
+## Arquitetura
 
 `PWA -> API segura -> Neon/Postgres -> Gemini -> n8n -> APIs oficiais -> métricas -> Growth Intelligence`
 
+## Roadmap
+Consulte:
+- `docs/ARCHITECTURE.md`
+- `docs/PRODUCT-ROADMAP.md`
+- `docs/N8N-FLOW.md`
+- `docs/CLIENT-PILOT.md`
+- `SETUP.md`
+
 ## GitHub Pages
-
-Publicação: branch `main`, diretório `/(root)`.
-
-URL esperada:
 
 https://raphaelbuenocaptacao-creator.github.io/AUTHORITY-OS/
