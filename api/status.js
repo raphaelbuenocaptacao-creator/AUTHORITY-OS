@@ -1,4 +1,7 @@
+import { cors } from './_cors.js';
+
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   const integrations = {
     gemini: Boolean(process.env.GEMINI_API_KEY),
     n8n: Boolean(process.env.N8N_WEBHOOK_URL),
