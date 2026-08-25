@@ -1,0 +1,13 @@
+{
+  "name": "authority-os",
+  "private": true,
+  "version": "2.2.0",
+  "description": "Authority OS — PWA de autoridade, conteúdo e crescimento local",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
