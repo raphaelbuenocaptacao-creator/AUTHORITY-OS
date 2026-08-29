@@ -1,7 +1,8 @@
-const CACHE = 'authority-os-shell-v24';
+const CACHE = 'authority-os-shell-v25';
 const APP_SHELL = [
   './',
   './index.html',
+  './manifest.json',
   './manifest.webmanifest',
   './icon.svg',
   './icons/icon-192.svg',
