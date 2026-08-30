@@ -1,4 +1,4 @@
-const CACHE = 'authority-os-shell-v26-safe';
+const CACHE = 'authority-os-shell-v27-safe';
 const APP_SHELL = [
   './',
   './index.html',
@@ -12,8 +12,8 @@ const APP_SHELL = [
 
 const PRIVATE_PATH = /\/(api|auth|login|logout|admin|session|token|account|profile|user|users|me)(\/|$)/i;
 const PRIVATE_QUERY_KEYS = new Set([
-  'token', 'access_token', 'refresh_token', 'password', 'secret', 'session',
-  'auth', 'authorization', 'api_key', 'apikey', 'key', 'code', 'credential'
+  'token', 'access_token', 'refresh_token', 'password', 'passwd', 'secret', 'session',
+  'auth', 'authorization', 'api_key', 'apikey', 'key', 'code', 'credential', 'credentials'
 ]);
 
 function hasPrivateQuery(url) {
