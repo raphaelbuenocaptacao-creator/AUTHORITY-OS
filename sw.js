@@ -1,4 +1,4 @@
-const CACHE = 'authority-os-shell-v25';
+const CACHE = 'authority-os-shell-v26-safe';
 const APP_SHELL = [
   './',
   './index.html',
@@ -10,8 +10,18 @@ const APP_SHELL = [
   './icons/icon-512-maskable.svg'
 ];
 
-const PRIVATE_PATH = /\/(api|auth|login|logout|admin|session|token|account|profile|user|me)(\/|$)/i;
-const PRIVATE_QUERY = /(token|access_token|refresh_token|password|secret|session|auth)=/i;
+const PRIVATE_PATH = /\/(api|auth|login|logout|admin|session|token|account|profile|user|users|me)(\/|$)/i;
+const PRIVATE_QUERY_KEYS = new Set([
+  'token', 'access_token', 'refresh_token', 'password', 'secret', 'session',
+  'auth', 'authorization', 'api_key', 'apikey', 'key', 'code', 'credential'
+]);
+
+function hasPrivateQuery(url) {
+  for (const key of url.searchParams.keys()) {
+    if (PRIVATE_QUERY_KEYS.has(String(key).toLowerCase())) return true;
+  }
+  return false;
+}
 
 function isCacheSafe(request) {
   if (request.method !== 'GET') return false;
@@ -20,7 +30,7 @@ function isCacheSafe(request) {
   if (request.headers.has('authorization')) return false;
   if (request.headers.has('cookie')) return false;
   if (PRIVATE_PATH.test(url.pathname)) return false;
-  if (PRIVATE_QUERY.test(url.search)) return false;
+  if (hasPrivateQuery(url)) return false;
   return true;
 }
 
@@ -46,16 +56,18 @@ self.addEventListener('fetch', event => {
 
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => caches.match('./index.html'))
+      fetch(request, { cache: 'no-store' })
+        .catch(() => caches.match('./index.html'))
     );
     return;
   }
 
   const url = new URL(request.url);
+  if (url.search) return;
   const shellPath = `.${url.pathname}`;
   if (!APP_SHELL.includes(shellPath)) return;
 
   event.respondWith(
-    caches.match(request).then(cached => cached || fetch(request))
+    caches.match(request).then(cached => cached || fetch(request, { cache: 'no-store' }))
   );
 });
