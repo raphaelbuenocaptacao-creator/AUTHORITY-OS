@@ -1,4 +1,4 @@
-const CACHE = 'authority-os-shell-v27-safe';
+const CACHE = 'authority-os-shell-v28-safe';
 const APP_SHELL = [
   './',
   './index.html',
@@ -23,7 +23,7 @@ function hasPrivateQuery(url) {
   return false;
 }
 
-function isCacheSafe(request) {
+function isRequestCacheSafe(request) {
   if (request.method !== 'GET') return false;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return false;
@@ -34,12 +34,33 @@ function isCacheSafe(request) {
   return true;
 }
 
+function isResponseCacheSafe(response) {
+  if (!response || !response.ok || response.type === 'opaque') return false;
+  const cacheControl = (response.headers.get('cache-control') || '').toLowerCase();
+  if (cacheControl.includes('private') || cacheControl.includes('no-store')) return false;
+  if (response.headers.has('set-cookie')) return false;
+  return true;
+}
+
+async function precacheShell() {
+  const cache = await caches.open(CACHE);
+  await Promise.all(APP_SHELL.map(async path => {
+    try {
+      const response = await fetch(path, {
+        cache: 'no-store',
+        credentials: 'omit'
+      });
+      if (isResponseCacheSafe(response)) {
+        await cache.put(path, response.clone());
+      }
+    } catch (_) {
+      // An optional shell asset must not block service-worker installation.
+    }
+  }));
+}
+
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(precacheShell().then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {
@@ -52,13 +73,16 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const { request } = event;
-  if (!isCacheSafe(request)) return;
+  if (!isRequestCacheSafe(request)) return;
 
   if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request, { cache: 'no-store' })
-        .catch(() => caches.match('./index.html'))
-    );
+    event.respondWith((async () => {
+      try {
+        return await fetch(request, { cache: 'no-store' });
+      } catch (_) {
+        return (await caches.match('./index.html')) || Response.error();
+      }
+    })());
     return;
   }
 
@@ -67,7 +91,15 @@ self.addEventListener('fetch', event => {
   const shellPath = `.${url.pathname}`;
   if (!APP_SHELL.includes(shellPath)) return;
 
-  event.respondWith(
-    caches.match(request).then(cached => cached || fetch(request, { cache: 'no-store' }))
-  );
+  event.respondWith((async () => {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+
+    const response = await fetch(request, { cache: 'no-store', credentials: 'omit' });
+    if (isResponseCacheSafe(response)) {
+      const cache = await caches.open(CACHE);
+      await cache.put(request, response.clone());
+    }
+    return response;
+  })());
 });
