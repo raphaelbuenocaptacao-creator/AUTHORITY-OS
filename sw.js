@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'authority-os-shell-';
-const CACHE = `${CACHE_PREFIX}v30-safe`;
+const CACHE = `${CACHE_PREFIX}v31-safe`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,6 +30,7 @@ function isRequestCacheSafe(request) {
   if (url.origin !== self.location.origin) return false;
   if (request.headers.has('authorization')) return false;
   if (request.headers.has('cookie')) return false;
+  if (request.headers.has('range')) return false;
   if (PRIVATE_PATH.test(url.pathname)) return false;
   if (hasPrivateQuery(url)) return false;
   return true;
@@ -40,6 +41,7 @@ function isResponseCacheSafe(response) {
   const cacheControl = (response.headers.get('cache-control') || '').toLowerCase();
   if (cacheControl.includes('private') || cacheControl.includes('no-store')) return false;
   if (response.headers.has('set-cookie')) return false;
+  if (response.headers.has('content-range')) return false;
   return true;
 }
 
