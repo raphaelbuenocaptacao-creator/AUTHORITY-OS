@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'authority-os-shell-';
-const CACHE = `${CACHE_PREFIX}v29-safe`;
+const CACHE = `${CACHE_PREFIX}v30-safe`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -36,7 +36,7 @@ function isRequestCacheSafe(request) {
 }
 
 function isResponseCacheSafe(response) {
-  if (!response || !response.ok || response.type === 'opaque') return false;
+  if (!response || !response.ok || response.type === 'opaque' || response.status === 206) return false;
   const cacheControl = (response.headers.get('cache-control') || '').toLowerCase();
   if (cacheControl.includes('private') || cacheControl.includes('no-store')) return false;
   if (response.headers.has('set-cookie')) return false;
