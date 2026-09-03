@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'authority-os-shell-';
-const CACHE = `${CACHE_PREFIX}v31-safe`;
+const CACHE = `${CACHE_PREFIX}v32-safe`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,14 +30,14 @@ function isRequestCacheSafe(request) {
   if (url.origin !== self.location.origin) return false;
   if (request.headers.has('authorization')) return false;
   if (request.headers.has('cookie')) return false;
-  if (request.headers.has('range')) return false;
+  if (request.headers.has('range') || request.headers.has('if-range')) return false;
   if (PRIVATE_PATH.test(url.pathname)) return false;
   if (hasPrivateQuery(url)) return false;
   return true;
 }
 
 function isResponseCacheSafe(response) {
-  if (!response || !response.ok || response.type === 'opaque' || response.status === 206) return false;
+  if (!response || !response.ok || response.type === 'opaque' || response.status === 206 || response.redirected) return false;
   const cacheControl = (response.headers.get('cache-control') || '').toLowerCase();
   if (cacheControl.includes('private') || cacheControl.includes('no-store')) return false;
   if (response.headers.has('set-cookie')) return false;
@@ -51,7 +51,8 @@ async function precacheShell() {
     try {
       const response = await fetch(path, {
         cache: 'no-store',
-        credentials: 'omit'
+        credentials: 'omit',
+        redirect: 'error'
       });
       if (isResponseCacheSafe(response)) {
         await cache.put(path, response.clone());
@@ -81,7 +82,7 @@ self.addEventListener('fetch', event => {
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
       try {
-        return await fetch(request, { cache: 'no-store' });
+        return await fetch(request, { cache: 'no-store', redirect: 'error' });
       } catch (_) {
         return (await caches.match('./index.html')) || Response.error();
       }
@@ -98,7 +99,7 @@ self.addEventListener('fetch', event => {
     const cached = await caches.match(request);
     if (cached) return cached;
 
-    const response = await fetch(request, { cache: 'no-store', credentials: 'omit' });
+    const response = await fetch(request, { cache: 'no-store', credentials: 'omit', redirect: 'error' });
     if (isResponseCacheSafe(response)) {
       const cache = await caches.open(CACHE);
       await cache.put(request, response.clone());
