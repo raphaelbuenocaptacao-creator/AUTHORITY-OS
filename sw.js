@@ -1,14 +1,14 @@
 const CACHE_PREFIX = 'authority-os-shell-';
-const CACHE = `${CACHE_PREFIX}v32-safe`;
+const CACHE = `${CACHE_PREFIX}v33-raster-safe`;
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './manifest.webmanifest',
   './icon.svg',
-  './icons/icon-192.svg',
-  './icons/icon-512.svg',
-  './icons/icon-512-maskable.svg'
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-512-maskable.png'
 ];
 
 const PRIVATE_PATH = /\/(api|auth|login|logout|admin|session|token|account|profile|user|users|me)(\/|$)/i;
@@ -54,11 +54,9 @@ async function precacheShell() {
         credentials: 'omit',
         redirect: 'error'
       });
-      if (isResponseCacheSafe(response)) {
-        await cache.put(path, response.clone());
-      }
+      if (isResponseCacheSafe(response)) await cache.put(path, response.clone());
     } catch (_) {
-      // An optional shell asset must not block service-worker installation.
+      // Optional shell assets must not block installation.
     }
   }));
 }
