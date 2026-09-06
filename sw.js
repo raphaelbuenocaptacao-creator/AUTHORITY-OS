@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'authority-os-shell-';
-const CACHE = `${CACHE_PREFIX}v33-raster-safe`;
+const CACHE = `${CACHE_PREFIX}v34-private-vary-safe`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -36,12 +36,21 @@ function isRequestCacheSafe(request) {
   return true;
 }
 
+function variesPrivate(response) {
+  const vary = (response.headers.get('vary') || '').toLowerCase();
+  return vary.split(',').some(value => {
+    const key = value.trim();
+    return key === 'cookie' || key === 'authorization';
+  });
+}
+
 function isResponseCacheSafe(response) {
   if (!response || !response.ok || response.type === 'opaque' || response.status === 206 || response.redirected) return false;
   const cacheControl = (response.headers.get('cache-control') || '').toLowerCase();
   if (cacheControl.includes('private') || cacheControl.includes('no-store')) return false;
   if (response.headers.has('set-cookie')) return false;
   if (response.headers.has('content-range')) return false;
+  if (variesPrivate(response)) return false;
   return true;
 }
 
