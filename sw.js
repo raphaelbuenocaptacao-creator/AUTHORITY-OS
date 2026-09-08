@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'authority-os-shell-';
-const CACHE = `${CACHE_PREFIX}v34-private-vary-safe`;
+const CACHE = `${CACHE_PREFIX}v35-private-vary-star-safe`;
 const APP_SHELL = [
   './',
   './index.html',
@@ -40,7 +40,7 @@ function variesPrivate(response) {
   const vary = (response.headers.get('vary') || '').toLowerCase();
   return vary.split(',').some(value => {
     const key = value.trim();
-    return key === 'cookie' || key === 'authorization';
+    return key === '*' || key === 'cookie' || key === 'authorization';
   });
 }
 
