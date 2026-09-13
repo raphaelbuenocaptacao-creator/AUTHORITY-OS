@@ -1,0 +1,53 @@
+name: Authority OS PWA Audit
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pwa-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PWA contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f manifest.webmanifest
+          test -f sw.js
+          test -f index.html
+          test -f icons/icon-192.png
+          test -f icons/icon-512.png
+          test -f icons/icon-512-maskable.png
+
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+
+          manifest = json.loads(Path('manifest.webmanifest').read_text())
+          for key in ('name','short_name','start_url','display','theme_color','background_color','icons'):
+              assert manifest.get(key), f'manifest missing {key}'
+          assert manifest['display'] in ('standalone','fullscreen','minimal-ui')
+          icons = manifest['icons']
+          assert any(i.get('sizes') == '192x192' for i in icons)
+          assert any(i.get('sizes') == '512x512' for i in icons)
+          assert any(i.get('sizes') == '512x512' and 'maskable' in i.get('purpose','') for i in icons)
+
+          sw = Path('sw.js').read_text()
+          html = Path('index.html').read_text()
+          m = re.search(r"const CACHE = `\$\{CACHE_PREFIX\}([^`]+)`", sw)
+          assert m, 'service worker cache version not found'
+          version = m.group(1)
+          assert f"./sw.js?v={version}" in html, f'registration not aligned to {version}'
+          assert "updateViaCache:'none'" in html or 'updateViaCache: "none"' in html or 'updateViaCache:"none"' in html, 'updateViaCache none missing'
+          for needle in ('authorization','cookie','range','if-range','no-store','private','set-cookie','content-range'):
+              assert needle in sw.lower(), f'sw guard missing: {needle}'
+          assert "key.startsWith(CACHE_PREFIX)" in sw, 'cache cleanup is not prefix-scoped'
+          assert 'beforeinstallprompt' in html, 'install prompt support missing'
+          assert 'name="viewport"' in html and 'name="theme-color"' in html, 'mobile/theme meta missing'
+          print('Authority OS PWA contract OK:', version)
+          PY
