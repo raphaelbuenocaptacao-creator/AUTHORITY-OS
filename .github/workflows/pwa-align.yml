@@ -1,0 +1,54 @@
+name: Authority OS PWA Alignment
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  align:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Align service worker registration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          sw = Path('sw.js').read_text()
+          html_path = Path('index.html')
+          html = html_path.read_text()
+          m = re.search(r"const CACHE = `\$\{CACHE_PREFIX\}([^`]+)`", sw)
+          if not m:
+              raise SystemExit('Unable to determine service worker version')
+          version = m.group(1)
+          target = f"navigator.serviceWorker.register('./sw.js?v={version}',{{updateViaCache:'none'}})"
+          updated, count = re.subn(
+              r"navigator\.serviceWorker\.register\('\./sw\.js(?:\?v=[^']*)?'(?:,\s*\{[^}]*\})?\)",
+              target,
+              html,
+          )
+          if count != 1:
+              raise SystemExit(f'Expected exactly one service worker registration, found {count}')
+          html_path.write_text(updated)
+          print('Aligned registration to', version)
+          PY
+
+          if git diff --quiet -- index.html; then
+            echo 'Registration already aligned.'
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'fix(pwa): align Authority OS service worker registration'
+          git push
