@@ -1,5 +1,6 @@
 name: Authority OS PWA Audit
 
+# Contract: cache and registration versions must stay aligned.
 on:
   push:
     branches: [main]
