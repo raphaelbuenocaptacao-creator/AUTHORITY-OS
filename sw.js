@@ -40,7 +40,7 @@ function variesPrivate(response) {
   const vary = (response.headers.get('vary') || '').toLowerCase();
   return vary.split(',').some(value => {
     const key = value.trim();
-    return key === '*' || key === 'cookie' || key === 'authorization';
+    return key === '*' || key === 'cookie' || key === 'authorization' || key === 'range' || key === 'if-range';
   });
 }
 
