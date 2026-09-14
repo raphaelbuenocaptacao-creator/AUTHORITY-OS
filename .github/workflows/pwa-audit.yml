@@ -3,7 +3,6 @@ name: Authority OS PWA Audit
 # Contract: cache and registration versions must stay aligned.
 on:
   push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -50,5 +49,8 @@ jobs:
           assert "key.startsWith(CACHE_PREFIX)" in sw, 'cache cleanup is not prefix-scoped'
           assert 'beforeinstallprompt' in html, 'install prompt support missing'
           assert 'name="viewport"' in html and 'name="theme-color"' in html, 'mobile/theme meta missing'
+          assert 'visibilitychange' in html and "visibilityState==='visible'" in html, 'service worker refresh on resume missing'
+          assert 'registration.update()' in html, 'service worker update check missing'
+          assert 'controllerchange' in html and 'location.reload()' in html, 'service worker handoff reload missing'
           print('Authority OS PWA contract OK:', version)
           PY
