@@ -3,7 +3,6 @@ name: Authority OS PWA Audit
 # Contract: cache and registration versions must stay aligned.
 on:
   push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -21,6 +20,7 @@ jobs:
           test -f manifest.webmanifest
           test -f sw.js
           test -f index.html
+          test -f app-api.js
           test -f icons/icon-192.png
           test -f icons/icon-512.png
           test -f icons/icon-512-maskable.png
@@ -40,6 +40,8 @@ jobs:
 
           sw = Path('sw.js').read_text()
           html = Path('index.html').read_text()
+          bridge = Path('app-api.js').read_text()
+          runtime = html + '\n' + bridge
           m = re.search(r"const CACHE = `\$\{CACHE_PREFIX\}([^`]+)`", sw)
           assert m, 'service worker cache version not found'
           version = m.group(1)
@@ -50,5 +52,8 @@ jobs:
           assert "key.startsWith(CACHE_PREFIX)" in sw, 'cache cleanup is not prefix-scoped'
           assert 'beforeinstallprompt' in html, 'install prompt support missing'
           assert 'name="viewport"' in html and 'name="theme-color"' in html, 'mobile/theme meta missing'
+          assert 'visibilitychange' in runtime and "visibilityState === 'visible'" in runtime, 'service worker refresh on resume missing'
+          assert 'registration.update()' in runtime, 'service worker update check missing'
+          assert 'controllerchange' in runtime and 'location.reload()' in runtime, 'service worker handoff reload missing'
           print('Authority OS PWA contract OK:', version)
           PY

@@ -6,6 +6,29 @@
   const KEY = 'authority_os_api_base';
   const defaultBase = location.hostname.endsWith('vercel.app') ? '' : (localStorage.getItem(KEY) || '');
 
+  function installPwaLifecycle() {
+    if (!('serviceWorker' in navigator)) return;
+    const secureContext = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    if (!secureContext) return;
+
+    const hadController = Boolean(navigator.serviceWorker.controller);
+    let refreshing = false;
+
+    navigator.serviceWorker.ready.then(registration => {
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') registration.update().catch(() => {});
+      });
+    }).catch(() => {});
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadController || refreshing) return;
+      refreshing = true;
+      location.reload();
+    });
+  }
+
+  window.addEventListener('load', installPwaLifecycle, { once: true });
+
   function getBase(){
     return localStorage.getItem(KEY) || defaultBase;
   }
